@@ -18,5 +18,12 @@ func Router() *echo.Echo {
 	// Set Health check api
 	app.GET("/health", handler.HealthCheck)
 
+	// Create router (/user)
+	userRouter := app.Group("user")
+	{
+		userRouter.File("/signin", "./views/signin.html")
+		userRouter.File("/signup", "./views/signup.html")
+	}
+
 	return app
 }
