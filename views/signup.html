@@ -74,15 +74,15 @@
           <div class="form-body">
             <div class="form-group">
               <label class="form-subject" for="input-name">Username<span class="label-emphasis">*</span></label>
-              <input class="form-control" id="input-name" type="text" data-valid="false" />
+              <input class="form-control" id="input-name" type="text" name="name" data-valid="false" />
             </div>
             <div class="form-group">
               <label class="form-subject" for="input-email">Email<span class="label-emphasis">*</span></label>
-              <input class="form-control" id="input-email" type="email" data-valid="false" />
+              <input class="form-control" id="input-email" type="email" name="email" data-valid="false" />
             </div>
             <div class="form-group mb-4">
               <label class="form-subject" for="input-password">Password<span class="label-emphasis">*</span></label>
-              <input class="form-control" id="input-password" type="password" data-valid="false" />
+              <input class="form-control" id="input-password" type="password" name="password" data-valid="false" />
             </div>
             <div class="form-group">
               <button class="btn btn-primary btn-block " type="button" id="btn-signup" disabled>Sign up</button>
@@ -100,7 +100,55 @@
     <!-- Crypto 3.1.2 JS -->
     <script type="text/javascript" src="/assets/javascripts/crypto-core.min.js"></script>
     <script type="text/javascript" src="/assets/javascripts/crypto-sha256.min.js"></script>
+    <!-- Signup JS (custom) -->
+    <script type="text/javascript" src="/assets/javascripts/signup.js"></script>
     <!-- Custom JS -->
-    <script></script>
+    <script>
+      $inputName = document.getElementById("input-name");
+      $inputEmail = document.getElementById("input-email");
+      $inputPassword = document.getElementById("input-password");
+      $buttonSignup = document.getElementById("btn-signup");
+
+      // Verify input value
+      $inputName.addEventListener("blur", function() {
+        verifyInputValue(this);
+        checkNextStep();
+      });
+      $inputEmail.addEventListener("blur", function() {
+        verifyInputValue(this);
+        checkNextStep();
+      });
+      $inputPassword.addEventListener("keyup", function() {
+        verifyInputValue(this);
+        checkNextStep();
+      });
+      // Check next step
+      function checkNextStep() {
+        if (JSON.parse($inputName.getAttribute("data-valid")) && JSON.parse($inputEmail.getAttribute("data-valid")) && JSON.parse($inputPassword.getAttribute("data-valid"))) {
+          $buttonSignup.removeAttribute("disabled");
+        } else {
+          $buttonSignup.setAttribute("disabled", "");
+        }
+      }
+
+      // Sign up
+      $buttonSignup.addEventListener("click", function() {
+        const name = $inputName.value;
+        const email = $inputEmail.value;
+        const password = $inputPassword.value;
+
+        $.ajax({
+          type: "POST",
+          url: "/user/signup",
+          data: `name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
+          success: function(res) {
+            alert(res.message);
+            if (res.result) {
+              location.href = "/user/signin";
+            }
+          }
+        });
+      });
+    </script>
   </body>
 </html>
