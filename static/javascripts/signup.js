@@ -58,7 +58,7 @@ function verifyInputValue(elem) {
       unsatisfactory = (elem.value.length > 0 && !emailRegex.test(elem.value));
       message = "This email is not valid.";
     } else if (type === "password") {
-      unsatisfactory = (elem.value.length === 0 || elem.value.length >= 8);
+      unsatisfactory = (elem.value.length !== 0 && elem.value.length < 8);
       message = "Password must be at least 8 digits long.";
     }
   }

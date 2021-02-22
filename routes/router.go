@@ -25,6 +25,7 @@ func Router() *echo.Echo {
 		userRouter.File("/signup", "./views/signup.html")
 
 		userRouter.POST("/signup", handler.UserSignup)
+		userRouter.POST("/signin", handler.UserSignin)
 	}
 
 	return app

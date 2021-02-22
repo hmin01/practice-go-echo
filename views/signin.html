@@ -58,7 +58,38 @@
     <!-- Crypto 3.1.2 JS -->
     <script type="text/javascript" src="/assets/javascripts/crypto-core.min.js"></script>
     <script type="text/javascript" src="/assets/javascripts/crypto-sha256.min.js"></script>
+    <!-- Signin JS (custom) -->
+    <script type="text/javascript" src="/assets/javascripts/signin.js"></script>
     <!-- Custom JS -->
-    <script></script>
+    <script>
+      $inputEmail = document.getElementById("input-email")
+      $inputPassword = document.getElementById("input-password")
+
+      // Sign in
+      document.getElementById("btn-signin").addEventListener("click", function() {
+        let email = $inputEmail.value;
+        let password = $inputPassword.value;
+
+        console.log(email.length)
+
+        if (blankCheck(email)) {
+          alert("Please enter your email.");
+          $inputEmail.focus();
+        } else if (blankCheck(password)) {
+          alert("Please enter password.");
+          $inputPassword.focus();
+        } else {
+          password = createHash(password);
+          $.ajax({
+            type: "POST",
+            url: "/user/signin",
+            data: `email=${email}&password=${password}`,
+            success: function(res) {
+              alert(res.message);
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>

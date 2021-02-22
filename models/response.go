@@ -2,10 +2,11 @@ package models
 
 /*
  * Response code
- * 100 : success complete
- * 101 : not found data (query result)
+ * 0 : success complete
  *
- * 200 : internal server error
+ * 10 : internal server error
+ * 11 : not found data (query result)
+ * 12 : duplicate data (query result)
  */
 
 /* Response format */

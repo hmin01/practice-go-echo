@@ -25,21 +25,22 @@ func init() {
 	// Get database config info
 	data, result := util.ReadFile(DB_CONFIG)
 	if !result {
-		util.FatalError("database config invalid.")
+		util.OccurFatalError("database config invalid.")
 	}
 	// Convert to json
 	config := util.ConvertToJSON(data)
 	// Create DSN
 	dsn := config["user"].(string) + ":" + config["password"].(string) + "@tcp(" + config["host"].(string) + ":" + strconv.FormatFloat(config["port"].(float64), 'f', -1, 64) + ")/" + config["database"].(string)
 	// Create database object
-	db, err := sql.Open(DB_TYPE, dsn)
+	var err error
+	db, err = sql.Open(DB_TYPE, dsn)
 	if err != nil {
-		util.FatalError(err.Error())
+		util.OccurFatalError(err.Error())
 	}
 	// Test connection
 	connStat := db.Ping()
 	if connStat != nil {
-		util.FatalError(err.Error())
+		util.OccurFatalError(connStat.Error())
 	} else {
 		// Set connection options
 		db.SetConnMaxLifetime(time.Minute * 3)

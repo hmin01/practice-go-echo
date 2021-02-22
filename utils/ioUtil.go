@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"time"
 )
 
 func getAbsolutePath(filePath string) (string, error) {
@@ -57,8 +58,18 @@ func ReadFile(filePath string) ([]byte, bool) {
 	}
 }
 
+/* Convert function */
 func ConvertToJSON(rawData []byte) map[string]interface{} {
 	var data map[string]interface{}
 	json.Unmarshal(rawData, &data)
 	return data
+}
+
+func ConvertToTime(strTime string) (time.Time, error) {
+	time, err := time.Parse("2006-01-02 15:04:05", strTime)
+	if err != nil {
+		return time, err
+	} else {
+		return time, nil
+	}
 }

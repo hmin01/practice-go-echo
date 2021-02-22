@@ -135,7 +135,7 @@
       $buttonSignup.addEventListener("click", function() {
         const name = $inputName.value;
         const email = $inputEmail.value;
-        const password = $inputPassword.value;
+        const password = createHash($inputPassword.value);
 
         $.ajax({
           type: "POST",
@@ -144,6 +144,11 @@
           success: function(res) {
             alert(res.message);
             if (res.result) {
+              // Clear
+              $inputName.value = "";
+              $inputEmail.value = "";
+              $inputPassword.value = "";
+              // Move sign-in page
               location.href = "/user/signin";
             }
           }
