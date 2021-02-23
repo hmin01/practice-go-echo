@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr">
   <head>
-    <meta title="Registration" charset="utf-8" />
+    <meta title="Sign-up" charset="utf-8" />
     <!-- Bootstrap 4.5.3 CSS -->
     <link rel="stylesheet" href="/assets/stylesheets/bootstrap.css" />
     <!-- Custom CSS -->
@@ -144,7 +144,7 @@
           success: function(res) {
             alert(res.message);
             if (res.result) {
-              // Clear
+              // Clear input form
               $inputName.value = "";
               $inputEmail.value = "";
               $inputPassword.value = "";

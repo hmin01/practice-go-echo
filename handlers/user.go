@@ -13,6 +13,10 @@ import (
 	util "practice-go-echo/utils"
 )
 
+const (
+	SESS_USERINFO = "user#info"
+)
+
 func UserSignup(ctx echo.Context) error {
 	inName, err := url.QueryUnescape(ctx.FormValue("name"))
 	if eval := util.CatchError(err); eval != nil {
@@ -92,8 +96,27 @@ func UserSignin(ctx echo.Context) error {
 		if eval := util.CatchError(err); eval != nil {
 			return eval
 		}
-		fmt.Println(info)
+		// Create user session
+		err = util.CreateSession(ctx, SESS_USERINFO, 3600)
+		if eval := util.CatchError(err); eval != nil {
+			return eval
+		}
+		// Save user data in session
+		err = util.SaveSession(ctx, SESS_USERINFO, "user", info, true)
+		if eval := util.CatchError(err); eval != nil {
+			return eval
+		}
 		// Return
 		return util.HTTPResponse(ctx, true, 0, nil)
 	}
+}
+
+func UserMain(ctx echo.Context) error {
+	// Get user session data (user info)
+	info, err := util.ReadSession(ctx, SESS_USERINFO, "user", true)
+	if eval := util.CatchError(err); eval != nil {
+		return eval
+	}
+	fmt.Println(info)
+	return util.HTTPResponse(ctx, true, 0, []interface{}{"Username: " + info["name"].(string)})
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr">
   <head>
-    <meta title="Registration" charset="utf-8" />
+    <meta title="Sign-in" charset="utf-8" />
     <!-- Bootstrap 4.5.3 CSS -->
     <link rel="stylesheet" href="/assets/stylesheets/bootstrap.css" />
     <!-- Custom CSS -->
@@ -85,7 +85,15 @@
             url: "/user/signin",
             data: `email=${email}&password=${password}`,
             success: function(res) {
-              alert(res.message);
+              if (res.result) {
+                // Clear input form
+                $inputEmail.value = "";
+                $inputPassword.value = "";
+                // Move page
+                location.href = "/user/";
+              } else {
+                alert(res.message);
+              }
             }
           });
         }
