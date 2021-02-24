@@ -1,21 +1,34 @@
 package routes
 
 import (
+	_ "bufio"
+	"os"
+	// Echo
 	echo "github.com/labstack/echo"
 	middleware "github.com/labstack/echo/middleware"
 	session "github.com/labstack/echo-contrib/session"
 	sessions "github.com/gorilla/sessions"
 	// Handler
 	handler "practice-go-echo/handlers"
+	// Moduls
+	util "practice-go-echo/utils"
 )
 
 func Router() *echo.Echo {
+	// Write log
+	outputLogs, err := os.OpenFile("./resources/logs", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		util.OccurFatalError(err.Error())
+	}
 	// Create echo
 	app := echo.New()
 	// Set session
 	store := sessions.NewCookieStore([]byte("secret"))
 	// Set middleware
-	app.Use(middleware.Logger())
+	app.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: `{"time":"${time_rfc3339}", "remote_ip":"${remote_ip}", "method":"${method}", "status":"${status}", "uri":"${uri}", "user_agent":"${user_agent}"}` + "\r\n",
+		Output: outputLogs,
+	}))
 	app.Use(middleware.Recover())
 	app.Use(session.MiddlewareWithConfig(session.Config{Store: store}))
 
